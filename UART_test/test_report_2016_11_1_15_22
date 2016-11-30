@@ -1,0 +1,16 @@
+ 
+------------------------------ summary report ------------------------------
+FW version  : 16 10 27 00  
+Spec version: 00 02  
+PRU address : 58 77 45 00 10 00  
+Detect PRx  : 58 77 45 00 10 00 
+
+                                power  voltage  current  temperature
+PTU readings before charhing:     465     5030      109       30
+PTU readings when charhing  :    3385     4974      684       52
+PRU readings when charhing  :    3281       -1       -1     -127
+
+ ---> Test Pass.  Test Pass.  Test Pass.
+----------------------------------------------------------------------------
+
+
