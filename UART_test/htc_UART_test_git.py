@@ -2,9 +2,9 @@
 # todo:  read COM port from command line
 
 import time
-import serial           # import the module
+import serial           	# import the module
 import sys
-import msvcrt as m
+import msvcrt as ms_com		# for MicroSoft. https://docs.python.org/2/library/msvcrt.html
 
 #for_WPC_test		= 1		# test WPC product ********************************
 
@@ -41,13 +41,13 @@ def com_port_init():
 		
 	return 0	
 
-COMMAND_TIME_OUT_TIME 	= 10 #10		# 10 second
-wait_time 			= 0.1 #0.1	# second, ENE need 100 ms delay between two commands
+COMMAND_TIME_OUT_TIME 	= 10  	#10		# 10 second
+wait_time 				= 0.1 	#0.1		# second, ENE need 100 ms delay between two commands
 
 # PTU vs PRU
 IS_PTU				= 0x00
 IS_PRU				= 0x01
-DONT_CARE			= 0xDD	# for other response like Spec Version
+DONT_CARE			= 0xDD		# for other response like Spec Version
 
 # for not found response
 IS_POWER			= 0x00
@@ -92,7 +92,7 @@ PRU_CHARGE_STOP 	= 0x93
 FAULT_AUTO		 	= 0x94
 PBS_RESTART_AUTO	= 0x95
 
-class PXU_Readings:
+class PXU_Readings:			# for both PTU and PRU
 	power = -1
 	voltage = -1
 	current = -1
@@ -136,7 +136,7 @@ def command_tx(cmd_tx, tx_data, cmd_name):
 	print(cmd_name, 'Command sent:     ', end="")
 	#print(tx_list[0:10])
 	for i in range(0, 10):
-		print(format(tx_list[i], '02X'), end="")
+		print(format(tx_list[i], '02X'), end="")	# or   print('{0:2X}'.format(tx_list[i]), end="")
 		print(' ', end="")
 	print()
 
@@ -1036,11 +1036,13 @@ def summary_report_file(fout, pru_address, detect_prx_address):
 	print('----------------------------------------------------------------------------', file=fout)
 	print('', file=fout)
 	print('', file=fout)
+
+	
 #******************************
 # wait user enter a key
 #******************************
 def wait_user_input():
-    return m.getch()
+    return ms_com.getch()
 
 
 #******************************
@@ -1067,6 +1069,8 @@ def detect_failure_process(fout):
 	print_test_fail_file(fout)
 	user_continue = ask_exit_prompt()
 	return user_continue
+
+
     
 #************************************************************************************
 def main():
@@ -1078,9 +1082,9 @@ def main():
 
 	localtime = time.localtime(time.time())
 	#print(localtime.tm_year)
-	time_now = 'test_report_' + str(localtime.tm_year) + '_' + str(localtime.tm_mon) + '_' + str(localtime.tm_mday) + '_' + str(localtime.tm_hour) + '_' + str(localtime.tm_min)# + '_' + str(localtime.tm_sec)
+	file_name_time_now = 'test_report_' + str(localtime.tm_year) + '_' + str(localtime.tm_mon) + '_' + str(localtime.tm_mday) + '_' + str(localtime.tm_hour) + '_' + str(localtime.tm_min)# + '_' + str(localtime.tm_sec)
 
-	fout = open(time_now, 'w')
+	fout = open(file_name_time_now, 'w')
 
 	user_continue = 1
 	
@@ -1335,6 +1339,8 @@ def main():
 
 	ComPort.close()
 	fout.close()
+#************************************************************************************
+
 
 if __name__ == "__main__":
     main()
