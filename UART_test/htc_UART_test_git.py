@@ -6,7 +6,7 @@ import serial           	# import the module
 import sys
 import msvcrt as ms_com		# for MicroSoft. https://docs.python.org/2/library/msvcrt.html
 
-#for_WPC_test		= 1		# test WPC product ********************************
+#is_WPC_device		= 1		# test WPC product ********************************
 
 
 
@@ -205,18 +205,18 @@ def command_tx_rx(cmd_tx, tx_data, pxu, return_data, cmd_name):
 			if rx_list[8] == 0x00:
 				print('-->', cmd_name, 'Response is correct')
 			else:
-				print('-->', cmd_name, 'Response is wrong')
+				print('-->', cmd_name, 'Response is wrong --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 				return_value = 1
 		elif pxu == IS_PRU:
 			if rx_list[8] == 0x01:
 				print('-->', cmd_name, 'Response is correct')
 			else:
-				print('-->', cmd_name, 'Response is wrong')
+				print('-->', cmd_name, 'Response is wrong --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 				return_value = 1
 		else:	# don't care
 			print('-->', cmd_name, 'Response is correct')
 	else:
-		print('-->', cmd_name, 'Response is wrong')
+		print('-->', cmd_name, 'Response is wrong --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 		return_value = 1
 
 	print_seperation_line()
@@ -284,7 +284,7 @@ def command_tx_rx_not_found(cmd_tx, tx_data, type, cmd_name):
 	if ((rx_list[0] == 0x5A) and (rx_list[1] == 0x5A) and (rx_list[2] == NOT_FOUND) and rx_list[9] == checksum and  rx_list[8] == type):
 		print('-->', cmd_name, 'Response Not Found is correct')
 	else:
-		print('-->', cmd_name, 'Response Not Found is wrong')
+		print('-->', cmd_name, 'Response Not Found is wrong --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 		return_value = 1
 
 	print_seperation_line()
@@ -571,7 +571,7 @@ def test_pru_id_command(id_number):
 #		0: OK
 #		1: error
 #********************************
-def get_pru_readings(address, reading, for_WPC_test):
+def get_pru_readings(address, reading, is_WPC_device):
 	#wait_time = 1	# second
 	data = []
 	error = 0
@@ -587,7 +587,7 @@ def get_pru_readings(address, reading, for_WPC_test):
 		error = 1
 	time.sleep(wait_time)
 
-	if(for_WPC_test != 1):
+	if(is_WPC_device != 1):
 		return_data = []
 		result = command_tx_rx(0x0A, data, IS_PRU, return_data, 'PRU voltage')
 		if result == 0:	# OK
@@ -622,7 +622,7 @@ def get_pru_readings(address, reading, for_WPC_test):
 #		0: OK
 #		1: error
 #********************************
-def get_pru_readings_not_found(address, for_WPC_test):
+def get_pru_readings_not_found(address, is_WPC_device):
 	#wait_time = 1	# second
 	data = []
 	error = 0
@@ -635,7 +635,7 @@ def get_pru_readings_not_found(address, for_WPC_test):
 		error = 1
 	time.sleep(wait_time)
 
-	if (for_WPC_test != 1):
+	if is_WPC_device != 1:
 		result = command_tx_rx_not_found(ASK_VOLTAGE, data, IS_VOLTAGE_NOT_FOUND, 'PRU voltage')
 		if result == 1:	# Fail
 			error = 1
@@ -692,7 +692,7 @@ def detect_start_charge_command_and_pru_addr(address, detect_address):
 			print('--> unexpected message is received')
 			continue	# don't sleep! to speed up
 
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	if(pbs_charge_start_received == 1):
 	#		do_it = 0
 	#else:
@@ -746,7 +746,7 @@ def detect_stop_charge_command(address):
 			print('--> unexpected message is received')
 			error = 1
 			
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	if(pbs_charge_stop_received == 1):
 	#		do_it = 0
 	#else:
@@ -810,7 +810,7 @@ def detect_off_response_and_stop_charge_command(address):
 			print('--> unexpected message is received')
 			error = 1
 			
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	if(pbs_charge_stop_received == 1):
 	#		do_it = 0
 	#else:
@@ -860,7 +860,7 @@ def detect_off_response():
 			print('--> unexpected message is received')
 			error = 1
 			
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	if(pbs_charge_stop_received == 1):
 	#		do_it = 0
 	#else:
@@ -955,19 +955,19 @@ def detect_pru_id_not_found_command():
 
 
 	if result == 1:
-		print('xxxxx>>> wait too long (', 5, ' seconds ) to detect PRxID Not Found response')
+		print('xxxxx>>> wait too long (', 5, ' seconds ) to detect PRxID Not Found response --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 		error = 1
 	elif a_response[2] == NOT_FOUND:
 		for i in range(0, 5):	# 5 bytes only
 			if 0 != a_response[3 + i]:
-				print('xxxxx>>> address not matched')
+				print('xxxxx>>> address not matched --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 				error = 1
 				break
 		if IS_PRX_ID_NOT_FOUND != a_response[8]:
-			print('xxxxx>>> ID not found\(0x04\) not matched')
+			print('xxxxx>>> ID not found\(0x04\) not matched --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 			error = 1
 	else:
-		print('--> unexpected message is received')
+		print('--> unexpected message is received --  XXXXXXXXXX  XXXXXXXXXX  XXXXXXXXXX')
 		error = 1
 
 	if error == 0:
@@ -982,20 +982,36 @@ def detect_pru_id_not_found_command():
 #***************************************
 def print_test_fail():
 	print()
-	print(' ---> Test Fail !!!  Test Fail !!!  Test Fail !!!')
-	print('----------------------------------------------------------------------------')
-	print()
-	print()
+	print(' ---> Below Test Failed !!!  Test Failed !!!  Test Failed !!!')
+	#print('----------------------------------------------------------------------------')
+	#print()
 
 
 #***************************************
 #***************************************
 def print_test_fail_file(fout):
 	print('', file=fout)
-	print(' ---> Test Fail !!!  Test Fail !!!  Test Fail !!!', file=fout)
-	print('----------------------------------------------------------------------------', file=fout)
+	print(' ---> Below Test Failed !!!  Test Failed !!!  Test Failed !!!', file=fout)
+	#print('----------------------------------------------------------------------------', file=fout)
+	#print('', file=fout)
+
+
+#***************************************
+#***************************************
+def print_test_success():
+	print()
+	print(' ---> Below Test Succeeded !!!  Test Succeeded !!!  Test Succeeded !!!')
+	#print('----------------------------------------------------------------------------')
+	#print()
+
+
+#***************************************
+#***************************************
+def print_test_success_file(fout):
 	print('', file=fout)
-	print('', file=fout)
+	print(' ---> Below Test Succeeded !!!  Test Succeeded !!!  Test Succeeded !!!', file=fout)
+	#print('----------------------------------------------------------------------------', file=fout)
+	#print('', file=fout)
 
 	
 #***************************************
@@ -1042,13 +1058,13 @@ def summary_report(pru_address, detect_prx_address, is_WPC):
 	print('PTU readings off no PRU	   	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_off_no_pru.power, ptu_read_off_no_pru.voltage, ptu_read_off_no_pru.current, ptu_read_off_no_pru.temp))
 
 	if is_WPC == 1:
-		print('Under Lock, power should < 5W ')
-		print('PTU readings lock with PRU  	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_lock_with_pru.power, ptu_read_lock_with_pru.voltage, ptu_read_lock_with_pru.current, ptu_read_lock_with_pru.temp))
-		print('PRU readings when locking  	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(pru_read_lock.power, pru_read_lock.voltage, pru_read_lock.current, pru_read_lock.temp))
+		print('     (below readings Under Lock, power should < 5W) ')
+		print('lock - PTU readings with PRU	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_lock_with_pru.power, ptu_read_lock_with_pru.voltage, ptu_read_lock_with_pru.current, ptu_read_lock_with_pru.temp))
+		print('lock - PRU readings  		:{0:8d} {1:8d} {2:8d} {3:8d}'.format(pru_read_lock.power, pru_read_lock.voltage, pru_read_lock.current, pru_read_lock.temp))
 	
 		
-	print()
-	print(' ---> Test Pass.  Test Pass.  Test Pass.')
+	#print()
+	#print(' ---> Test Pass.  Test Pass.  Test Pass.')
 	print('----------------------------------------------------------------------------')
 	print()
 	print()
@@ -1100,12 +1116,12 @@ def summary_report_file(fout, pru_address, detect_prx_address, is_WPC):
 	print('PTU readings off no PRU	   	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_off_no_pru.power, ptu_read_off_no_pru.voltage, ptu_read_off_no_pru.current, ptu_read_off_no_pru.temp), file=fout)
 
 	if is_WPC == 1:
-		print('Under Lock, power should < 5W ')
-		print('PTU readings lock with PRU  	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_lock_with_pru.power, ptu_read_lock_with_pru.voltage, ptu_read_lock_with_pru.current, ptu_read_lock_with_pru.temp), file=fout)
-		print('PRU readings when locking  	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(pru_read_lock.power, pru_read_lock.voltage, pru_read_lock.current, pru_read_lock.temp), file=fout)
+		print('     (below readings Under Lock, power should < 5W) ', file=fout)
+		print('lock - PTU readings with PRU	:{0:8d} {1:8d} {2:8d} {3:8d}'.format(ptu_read_lock_with_pru.power, ptu_read_lock_with_pru.voltage, ptu_read_lock_with_pru.current, ptu_read_lock_with_pru.temp), file=fout)
+		print('lock - PRU readings  		:{0:8d} {1:8d} {2:8d} {3:8d}'.format(pru_read_lock.power, pru_read_lock.voltage, pru_read_lock.current, pru_read_lock.temp), file=fout)
 	
-	print('', file=fout)
-	print(' ---> Test Pass.  Test Pass.  Test Pass.', file=fout)
+	#print('', file=fout)
+	#print(' ---> Test Pass.  Test Pass.  Test Pass.', file=fout)
 	print('----------------------------------------------------------------------------', file=fout)
 	print('', file=fout)
 	print('', file=fout)
@@ -1151,7 +1167,7 @@ def main():
 	#data = bytearray(b'A')
 
 	# ***** configuration start ***************************************************************
-	check_PRX_ID_not_found = 1;		# for PRX ID command: need return 0 number; 1: need return PRX ID NOT FOUND
+	check_PRX_ID_not_found = 1		# for PRX ID command: 0: need return number; 1: need return PRX ID NOT FOUND
 	# ***** configuration  end  ***************************************************************
 	
 	if(com_port_init()):
@@ -1180,10 +1196,10 @@ def main():
 		time.sleep(3) 	# AFA device need to wait 3 seconds *****
 		
 		print('-------- now test FW and Spec version commands')
-		a_err, for_WPC_test = get_version_info(FIRST_TIME_VERSION)
+		a_err, is_WPC_device = get_version_info(FIRST_TIME_VERSION)
 		error += a_err
 		
-		if(for_WPC_test == 1):
+		if(is_WPC_device == 1):
 			print('\n#### this is a WPC device test ####\n')
 		else:
 			print('\n#### this is a AFA device test ####\n')
@@ -1195,7 +1211,7 @@ def main():
 		
 		# because we need PRU address to read PRU readings, below test is not feasible
 		#print('-------- now test PRU reading (power) Not Found commands')
-		#error += get_pru_readings_not_found(pru_address, for_WPC_test)
+		#error += get_pru_readings_not_found(pru_address, is_WPC_device)
 
 
 		print('\n\n=============>>> Please put PRU on charge pad')	#-- to test Charge Start and read PTU & PRU readings \n')
@@ -1219,10 +1235,10 @@ def main():
 		error += get_ptu_readings(ptu_read_on_with_pru)
 
 
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	error += get_pru_readings(detect_prx_address, pru_read_on)
 	#else:
-		error += get_pru_readings(pru_address, pru_read_on, for_WPC_test)
+		error += get_pru_readings(pru_address, pru_read_on, 0)	#is_WPC_device)
 		#-------------------------------------------------------
 
 		print('\n-------- now test Off, On, Lock and Unlock commands, with PRU')
@@ -1250,7 +1266,7 @@ def main():
 		error += get_ptu_readings(ptu_read_off_with_pru)
 
 		print('-------- now test PRU reading (power) Not Found commands')
-		error += get_pru_readings_not_found(pru_address, for_WPC_test)
+		error += get_pru_readings_not_found(pru_address, 0)	#is_WPC_device)
 
 		if check_PRX_ID_not_found == 0:
 			print('\n-------- 111 now test 0 PRx ID command. PTU Off, with PRU')
@@ -1263,9 +1279,11 @@ def main():
 			print('\n-------- 111 now test PRx ID Not Found command. PTU Off, with PRU')
 			send_command(ASK_PRU_ID)	#error += test_pru_id_command(ZERO_PRU_ID)
 			result = detect_pru_id_not_found_command()	# Not Found
+			error += result
+			'''
 			if result == 1:
 				user_continue = detect_failure_process(fout)
-				continue
+				continue'''
 		
 
 		print('\n-------- now test On command, with PRU')
@@ -1278,7 +1296,7 @@ def main():
 			user_continue = detect_failure_process(fout)
 			continue
 
-		if(for_WPC_test == 1):	# for WPC
+		if(is_WPC_device == 1):	# for WPC
 		
 			print('\n-------- now test Lock command for WPC. Charge is possible.')
 			
@@ -1287,7 +1305,7 @@ def main():
 			# WPC can charge when Locked. Power should be < 5W.
 			print('\n-------- now test PTU and PRU reading commands when Lock. Should < 5W')
 			error += get_ptu_readings(ptu_read_lock_with_pru)
-			error += get_pru_readings(pru_address, pru_read_lock, for_WPC_test)
+			error += get_pru_readings(pru_address, pru_read_lock, 0)	#is_WPC_device)
 			
 
 			print('\n-------- now test Unlock command')
@@ -1371,10 +1389,10 @@ def main():
 			continue
 			
 		print('-------- now test PRU reading (power) Not Found commands')
-	#if(for_WPC_test == 1):
+	#if(is_WPC_device == 1):
 	#	error += get_pru_readings_not_found(detect_prx_address)
 	#else:
-		error += get_pru_readings_not_found(pru_address, for_WPC_test)
+		error += get_pru_readings_not_found(pru_address, 0)	#is_WPC_device)
 
 		# PTU is ON, so need to reply 0 PRU number and no more ID number reply
 		print('\n-------- 333 now test 0 PRx ID command. PTU ON, no PRU')
@@ -1387,7 +1405,7 @@ def main():
 
 		
 		#-------------------------------------------------------
-		if(for_WPC_test == 1):
+		if(is_WPC_device == 1):
 			print('\n-------- now test PTU Off command')
 		else:
 			print('\n-------- now test PTU Off command')
@@ -1416,7 +1434,7 @@ def main():
 		error += get_ptu_readings(ptu_read_off_no_pru)
 
 		print('-------- now test PRU reading (power) Not Found commands')
-		error += get_pru_readings_not_found(pru_address, for_WPC_test)
+		error += get_pru_readings_not_found(pru_address, 0)	#is_WPC_device)
 
 		if check_PRX_ID_not_found == 0:
 			print('\n-------- 444 now test 0 PRx ID command. PTU OFF, no PRU')
@@ -1429,9 +1447,11 @@ def main():
 			print('\n-------- 444 now test PRx ID Not Found command. PTU OFF, no PRU')
 			send_command(ASK_PRU_ID)	#error += test_pru_id_command(ZERO_PRU_ID)
 			result = detect_pru_id_not_found_command()	# Not Found
+			error += result
+			'''
 			if result == 1:
 				user_continue = detect_failure_process(fout)
-				continue
+				continue'''
 
 		print('\n\n=============>>> Please put PRU on charge pad again ASAP when PTU is Off')	#-- to test no response when PTU off
 		a_response = []
@@ -1447,13 +1467,17 @@ def main():
 			print_test_fail()
 			print_test_fail_file(fout)
 		else:
-			if(for_WPC_test == 1):
-				summary_report(pru_address, detect_prx_address, for_WPC_test)
-				summary_report_file(fout, pru_address, detect_prx_address, for_WPC_test)
-			else:
-				# for AFA, detect_prx_address may not happen. But detect_prx_address_AFA_lock is always available
-				summary_report(pru_address, detect_prx_address_AFA_lock, for_WPC_test)
-				summary_report_file(fout, pru_address, detect_prx_address_AFA_lock, for_WPC_test)
+			print_test_success()
+			print_test_success_file(fout)
+
+		
+		if(is_WPC_device == 1):
+			summary_report(pru_address, detect_prx_address, is_WPC_device)
+			summary_report_file(fout, pru_address, detect_prx_address, is_WPC_device)
+		else:
+			# for AFA, detect_prx_address may not happen. But detect_prx_address_AFA_lock is always available
+			summary_report(pru_address, detect_prx_address_AFA_lock, is_WPC_device)
+			summary_report_file(fout, pru_address, detect_prx_address_AFA_lock, is_WPC_device)
 
 		user_continue = ask_exit_prompt()
 
